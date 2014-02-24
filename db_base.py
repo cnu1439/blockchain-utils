@@ -4,7 +4,18 @@ from abc import abstractmethod
 
 class db_base:
 	__metaclass__ = ABCMeta
+
+	"""This will return transaction for given hash"""
+	@abstractmethod
+	def getTransaction(self, tx_hash):
+		return
 	
+	"""This will return all the input and output transaction hashes 
+	associated with given public key"""
+	@abstractmethod
+	def getTxs(self, pub_key):
+		return
+
 	"""Will return total input value for given public key"""
 	@abstractmethod
 	def getInBalance(self, pubkey):
