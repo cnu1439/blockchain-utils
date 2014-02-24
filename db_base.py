@@ -2,7 +2,7 @@
 from abc import ABCMeta
 from abc import abstractmethod
 
-class db_base:
+class DbBase:
 	__metaclass__ = ABCMeta
 
 	"""This will return transaction for given hash"""
@@ -42,3 +42,4 @@ class db_base:
 			totalValue += getBalance(key)
 
 		return totalValue
+
