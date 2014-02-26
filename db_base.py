@@ -18,17 +18,17 @@ class DbBase:
 
 	"""Will return total input value for given public key"""
 	@abstractmethod
-	def getInBalance(self, pubkey):
+	def getInBalance(self, txs):
 		return
 
 	"""Will return total output value for given public key"""
 	@abstractmethod
-	def getOutBalance(self, pubkey):
+	def getOutBalance(self, txs):
 		return
 
 	"""Will return total balance for given public key"""
-	def getBalance(self, pubkey):
-		return getOutBalance(pubkey)-getInBalance(pubkey)
+	def getBalance(self, txs):
+		return getOutBalance(txs)-getInBalance(txs)
 
 	"""Will return all the keys associated with given public key"""
 	@abstractmethod
