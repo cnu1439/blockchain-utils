@@ -29,6 +29,32 @@ class JsonRpc(DbBase):
             inBalance = inBalance + float(outputs['value'])
     return inBalance
   
+  def getOtherInPubKeys(self, tx_id, pub_key):
+    assoc_keys = []
+    tx = self.getTransaction(tx_id)
+
+    #match output addresses for the given public key
+    #if it matches add other public keys as associated keys for the given
+    #public key
+    found = False
+    
+    for inputs in tx['vin']:
+      input_tx = self.getTransaction(inputs['txid'])
+      vout = inputs['vout']
+      
+      for outputs in input_tx['vout']:
+        output = outputs['scriptPubKey']
+        if outputs['n'] == vout:
+          if output['addresses'].__contains__(pub_key):
+            found = True
+          else:
+            assoc_keys += output['addresses']
+
+    if found:
+      return assoc_keys
+    else:
+      return []
+  
   def getOutBalance(self, tx, pub_key):
     outBalance = float(0.0)
     for outputs in tx['vout']:
@@ -40,14 +66,20 @@ class JsonRpc(DbBase):
   def getTransaction(self, tx_id):
     return self.conn.decoderawtransaction(self.conn.getrawtransaction(tx_id))
   
-  def getUserKeys():
-    pass
+  def getUserKeys(self, pub_key): 
+    user_keys = [pub_key]
+    key_stack = [pub_key]
 
-class DecimalEncoder(json.JSONEncoder):
-  def default(self, o):
-    if isinstance(o, decimal.Decimal):
-      return float(o)
-    return super(DecimalEncoder, self).default(o)
+    while len(key_stack):
+      top_key = key_stack.pop()
+      for tx_id in self.getTxs(top_key):
+        for key in self.getOtherInPubKeys(tx_id, top_key):
+          if not user_keys.__contains__(key):
+            key_stack.append(key)
+            user_keys.append(key)
+            print key
+            
+    return user_keys
 
 if __name__ == "__main__": 
   o = JsonRpc('http://j7TFhOUQeQrrpbqEl1XH3oBj3iHq2K:y8mW06eRYXTG8p5WefP9BlMI2B3Mr0@localhost:18332')
@@ -65,4 +97,6 @@ if __name__ == "__main__":
     print outBal
     print "------"
 
+  print pub_key
+  print o.getUserKeys(pub_key)
   print "Final Balance : %f" % (final_balance)
