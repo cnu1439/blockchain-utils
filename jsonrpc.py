@@ -10,8 +10,7 @@ class JsonRpc(DbBase):
 
   def getTxs(self, pub_key):
     txs=self.conn.searchrawtransactions(pub_key)
-    txids = map(lambda x:x.get('txid'), txs)
-    return txids
+    return txs
 
 
   def getInBalance(self, tx, pub_key):
@@ -72,30 +71,25 @@ class JsonRpc(DbBase):
 
     while len(key_stack):
       top_key = key_stack.pop()
-      for tx_id in self.getTxs(top_key):
+      txids = map(lambda x:x['txid'], self.getTxs(top_key))
+      for tx_id in txids:
         for key in self.getOtherInPubKeys(tx_id, top_key):
           if not user_keys.__contains__(key):
             key_stack.append(key)
             user_keys.append(key)
-            print key
             
     return user_keys
 
 if __name__ == "__main__": 
   o = JsonRpc('http://j7TFhOUQeQrrpbqEl1XH3oBj3iHq2K:y8mW06eRYXTG8p5WefP9BlMI2B3Mr0@localhost:18332')
-  pub_key = 'mjb1msZF7ccR61n9UC19kjX8hNws6kyQaj'
-  tx_ids = o.getTxs(pub_key)
+  pub_key='mq6GY6Zfbmp6KHvjmtkPjFwuKffSJnGdJn'
+  txs = o.getTxs(pub_key)
   final_balance = float(0.0)
 
-  for tx_id in tx_ids:
-    tx = o.getTransaction(tx_id)
+  for tx in txs:
     inBal = o.getInBalance(tx, pub_key)
     outBal = o.getOutBalance(tx, pub_key)
     final_balance += (outBal - inBal)
-
-    print inBal
-    print outBal
-    print "------"
 
   print pub_key
   print o.getUserKeys(pub_key)
