@@ -1,9 +1,6 @@
-from db_base import DbBase
-import json
-import decimal
 from bitcoinrpc.authproxy import AuthServiceProxy
 
-class JsonRpc(DbBase):
+class JsonRpc:
   
   def __init__(self,conn_string):
     self.conn = AuthServiceProxy(conn_string)
@@ -91,8 +88,7 @@ class JsonRpc(DbBase):
 
 if __name__ == "__main__": 
   o = JsonRpc('http://j7TFhOUQeQrrpbqEl1XH3oBj3iHq2K:y8mW06eRYXTG8p5WefP9BlMI2B3Mr0@localhost:18332')
-  #pub_key = 'mjb1msZF7ccR61n9UC19kjX8hNws6kyQaj'
-  pub_key = 'mimoZNLcP2rrMRgdeX5PSnR7AjCqQveZZ4'
+  pub_key = 'mw7LpaMU47mFqA6Bt7x2CJWpxwKoSwiNr5'
   raw_txs = o.getTxs(pub_key)
 
   print "No of txs : %d" % (len(raw_txs))
