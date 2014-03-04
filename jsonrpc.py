@@ -86,19 +86,3 @@ class JsonRpc:
             
     return user_keys
 
-if __name__ == "__main__": 
-  o = JsonRpc('http://j7TFhOUQeQrrpbqEl1XH3oBj3iHq2K:y8mW06eRYXTG8p5WefP9BlMI2B3Mr0@localhost:18332')
-  pub_key = 'mw7LpaMU47mFqA6Bt7x2CJWpxwKoSwiNr5'
-  raw_txs = o.getTxs(pub_key)
-
-  print "No of txs : %d" % (len(raw_txs))
-  inBal = o.getInBalance(raw_txs, pub_key)
-  outBal = o.getOutBalance(raw_txs, pub_key)
-  final_balance = outBal - inBal
-  
-  print inBal
-  print outBal
-  print "------"
-
-  print o.getUserKeys(pub_key)
-  print "Final Balance : %f" % (final_balance)

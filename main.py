@@ -2,7 +2,8 @@
 from optparse import OptionParser
 from jsonrpc import JsonRpc
 def main():
-  usage = "usage: %prog [options] bitcoind_connection_string"
+  usage = """usage: %prog [options] bitcoind_connection_string
+       example: %prog -c mw7LpaMU47mFqA6Bt7x2CJWpxwKoSwiNr5 http://btcuser:btcpassword@localhost:18332"""
   parser = OptionParser(usage)
   parser.add_option("-b", "--balance", dest="balance",
      metavar="BT_ADDRESS", help="print balance of given bitcoin address")
